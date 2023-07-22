@@ -27,4 +27,3 @@ function GeneratedText() {
 }
 
 export default GeneratedText;
-

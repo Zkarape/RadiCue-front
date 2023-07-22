@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Paper, TextField, IconButton } from '@mui/material';
 import myImage from './imgsforfront/log-out-03.png'
 import myLogo from './imgsforfront/logo.png'
-import edit from './imgsforfront/edit.png'
+// import edit from './imgsforfront/edit.png'
 import searchicon from './imgsforfront/search.png'
 
 function TwoColumnPage() {
@@ -28,6 +28,29 @@ function TwoColumnPage() {
     setUserInput(event.target.value);
   };
 
+  const handleGenerateButtonClick = async () => {
+    try {
+      const response = await fetch('/api/generate-text', {
+        method: 'POST', // Replace with the appropriate HTTP method (GET, POST, etc.)
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userInput, // Assuming the userInput state contains the text you want to send to the backend
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate text');
+      }
+
+      const data = await response.json();
+      setGeneratedText(data.text);
+    } catch (error) {
+      console.error('Error generating text:', error);
+    }
+  };
+
   return (
     <div>
       {/* Box above the page */}
@@ -36,15 +59,15 @@ function TwoColumnPage() {
         <img
           src={myLogo}
           alt="Icon"
-          style={{ width: 'auto', height: '60px', marginRight: '900px' }}
+          style={{ width: 'auto', height: '60px', marginRight: '900px'}}
         />
         <img
           src={myImage}
           alt="Icon"
-          style={{ width: '40px', height: '40px', marginLeft: '350px', marginTop: '10px' }}
+          style={{ width: '40px', height: '40px', marginLeft: '350px', marginTop: '10px'}}
         />
       </Paper>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%'}}>
         {/* Search box with search icon */}
         <div
           style={{
@@ -74,7 +97,7 @@ function TwoColumnPage() {
             </TextField>
             <IconButton
               color="primary"
-              style={{ backgroundColor: '#e4e4ee', marginTop: "-43px", width: '30px', height: '30px', marginLeft: '350px'}}
+              style={{ backgroundColor: '#e4e4ee', marginTop: "-43px", width: '30px', height: '30px', marginLeft: '350px' }}
             >
               <img
                 src={searchicon}
@@ -93,7 +116,7 @@ function TwoColumnPage() {
               value={userInput}//to go to backend
               onChange={handleUserInputChange}
             />
-            <Button variant="contained" type="submit" color="primary" style={{ backgroundColor: '#4357a3', marginTop: "45px", border: '2px solid #4357a3' }}>
+            <Button variant="contained" type="submit" color="primary" style={{ backgroundColor: '#4357a3', marginTop: "45px", border: '2px solid #4357a3' }} onClick={handleGenerateButtonClick}>
               Generate
             </Button>
           </Paper>
@@ -108,11 +131,6 @@ function TwoColumnPage() {
             variant="outlined"
             value={generatedText}
             disabled
-          />
-          <img
-            src={edit}
-            alt="Icon"
-            style={{ width: '40px', height: '40px', marginLeft: '350px', marginTop: '10px' }}
           />
           <Button type="submit" color="primary" style={{ width: "100px", marginTop: "45px", border: '2px solid #576db6', marginRight: '15px', color: "#4357a3" }}>
             Cancel
